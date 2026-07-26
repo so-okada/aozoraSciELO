@@ -1,0 +1,18 @@
+{
+    "SciELO Preprints": {
+        "username": "aozorascielo-ppbot.bsky.social",
+        "password": "app_password",
+        "set": "",
+        "newsubmissions": "1",
+        "abstracts": "1",
+        "summaries": "1"
+    },
+    "An OAI set of your choice": {
+        "username": "another-bot.bsky.social",
+        "password": "app_password",
+        "set": "A_SETSPEC_FROM_ListSets",
+        "newsubmissions": "1",
+        "abstracts": "0",
+        "summaries": "0"
+    }
+}

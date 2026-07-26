@@ -1,0 +1,14 @@
+{
+    "SciELO Preprints": {
+        "username": "aozorascielo-ppbot.bsky.social",
+        "post_summary_log": "logfiles/ppbot_post_summaries.csv",
+        "post_log": "logfiles/ppbot_posts.csv",
+        "reply_log": "logfiles/ppbot_replies.csv"
+    },
+    "An OAI set of your choice": {
+        "username": "another-bot.bsky.social",
+        "post_summary_log": "logfiles/another-bot_post_summaries.csv",
+        "post_log": "logfiles/another-bot_posts.csv",
+        "reply_log": "logfiles/another-bot_replies.csv"
+    }
+}
