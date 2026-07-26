@@ -251,6 +251,13 @@ def values_in_language(elements, lang):
 # having on its own: a record whose dc:language names no language we can
 # use still has to be tagged with the language its title was read in, or
 # bluesky is told one language while the post carries another.
+#
+# SciELO Preprints accepts Spanish, English and Portuguese, and a
+# submission in either of the other two must carry an English title and
+# abstract as well. English is therefore the one group a record can be
+# counted on to have, which makes it the fallback when dc:language names
+# nothing usable: a group chosen for being first in the document would
+# depend on an order the repository never promised.
 def chosen_group(elements, lang):
     groups = {}
     order = []
@@ -265,6 +272,9 @@ def chosen_group(elements, lang):
 
     if lang and groups.get(lang):
         chosen_key, chosen = lang, groups[lang]
+    elif groups.get(post_language_default):
+        chosen_key, chosen = (post_language_default,
+                              groups[post_language_default])
     else:
         chosen_key, chosen = next(
             ((key, groups[key]) for key in order if groups[key]), ("", []))
