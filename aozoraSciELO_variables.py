@@ -42,11 +42,9 @@ unescape_rounds = 3
 oai_from_days_upper_limit = 7
 
 # how many days back a harvest asks for when -n is omitted, counted in
-# UTC. 1 covers yesterday and today, which absorbs a late datestamp and
-# a run that a preprint of yesterday arrived too late for.
-# SciELO Preprints publishes on any day of the week, so a Monday
-# run of a weekday only schedule wants -n 3 to land on Friday: 1 lands
-# on Sunday and loses Saturday for good.
+# UTC. Reaching past today absorbs a late datestamp and a missed run,
+# and 3 reaches over a weekend for a weekday only schedule. A value
+# above oai_from_days_upper_limit stops every run that omits -n.
 oai_from_days = 3
 
 # pause between one bot and the next of a multi bot run
