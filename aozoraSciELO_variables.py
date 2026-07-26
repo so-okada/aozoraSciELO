@@ -67,11 +67,10 @@ post_language_default = "en"
 author_separator = "; "
 
 # posts for new submissions:
-url_margin = 1
 min_len_authors = 60
-min_len_title = 120
+min_len_title = 100
 newsub_spacer = 1
-margin = 2
+margin = 3
 
 # abstract tag for a counter and a url, as in " [12/34 of <url>]"
 # without the url itself, which varies per preprint
