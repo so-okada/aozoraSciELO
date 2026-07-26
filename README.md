@@ -229,7 +229,8 @@ all arXiv categories with [toXiv](https://github.com/so-okada/toXiv).
 Since 2025-02, the author has been running bluesky bots for arXiv
 categories with [bXiv](https://github.com/so-okada/bXiv).
 Since 2026-07, aozoraSciELO extends the practice to
-[SciELO Preprints](https://preprints.scielo.org/).
+[SciELO Preprints](https://preprints.scielo.org/) with 
+[aozoraSciELO](https://github.com/so-okada/aozoraSciELO).
 [SciELO](https://www.scielo.org/en/about-scielo/) is an international
 cooperation program for open access scientific communication of all
 areas of knowledge, implemented as a public policy and adopted across
