@@ -86,21 +86,7 @@ aozoraSciELO is not affiliated with SciELO.
 	that label rather than risk a second announcement.
 
 * A harvest reaches `-n` days back, and `oai_from_days` days when `-n`
-  is omitted, one day by default. That covers yesterday and today, which
-  absorbs a late datestamp and a run that a preprint of yesterday
-  arrived too late for. Because the post log drops what has already been
-  announced, a wider reach costs a longer answer and never a duplicate
-  post: `-n 0` asks for today alone, `-n 7` for the last week, and a
-  backfill of a longer gap is the same option with a larger number.
-
-  **A schedule that skips days needs more than one day.** SciELO
-  Preprints publishes on any day of the week, so a Monday run of a
-  weekday only schedule has to reach back over the weekend. `-n 3` lands
-  it on Friday, which catches Saturday and Sunday along with anything
-  stamped on Friday after that morning's run. The default of one day
-  lands on Sunday and loses Saturday for good, since no later run asks
-  for that day again. Either pass `-n 3` on Mondays, pass it on every
-  weekday run, or raise `oai_from_days`.
+  is omitted. A Monday run reaches back over the weekend with `-n 3`.
 
 * Outputs of aozoraSciELO can differ from the SciELO Preprints web
   pages. This can be due to bugs in my scripts, connection errors, or a
