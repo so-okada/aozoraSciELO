@@ -53,6 +53,14 @@ bot_wait = 10
 # max post length is 300
 max_len = 300
 
+# bluesky tags every post with a language, which drives the language
+# filters of a feed and the offer to translate. A new submission and its
+# abstract carry the language of the preprint. This is for a summary,
+# written in English, and for a record whose dc:language says nothing
+# usable: the atproto client writes en whenever it is handed nothing, so
+# an unknown language becomes this rather than no tag at all.
+post_language_default = "en"
+
 # dc:creator of SciELO Preprints carries names in an inverted form such
 # as "Silva, Joao da", so a comma cannot separate one author from the
 # next. The parser and the formatter must agree on this.
