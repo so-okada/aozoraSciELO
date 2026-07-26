@@ -191,7 +191,7 @@ def parse_record(label, record, header, identifier):
     # repeated dc fields, so it has to be known first.
     lang = language(dc_values(dc, "language"))
 
-    titles = values_in_language(dc_elements(dc, "title"), lang)
+    title_lang, titles = chosen_group(dc_elements(dc, "title"), lang)
     if not titles:
         return None
 
@@ -206,7 +206,10 @@ def parse_record(label, record, header, identifier):
     entry["title"] = titles[0]
     entry["authors"] = author_separator.join(
         values_in_language(dc_elements(dc, "creator"), lang))
-    entry["language"] = lang
+    # what a post is tagged with, so the tag agrees with the title and the
+    # abstract the post carries, whether dc:language chose them or the
+    # first language group did.
+    entry["language"] = lang or title_lang
     entry["abstract"] = first(
         values_in_language(dc_elements(dc, "description"), lang))
     entry["subjects"] = ", ".join(
@@ -241,6 +244,21 @@ def lang_of(element):
 # language of the record, fall back on the first language group, and
 # dedupe what is left in case a group repeats a name.
 def values_in_language(elements, lang):
+    return chosen_group(elements, lang)[1]
+
+
+# the language group a field is read in, and its values. The key is worth
+# having on its own: a record whose dc:language names no language we can
+# use still has to be tagged with the language its title was read in, or
+# bluesky is told one language while the post carries another.
+#
+# SciELO Preprints accepts Spanish, English and Portuguese, and a
+# submission in either of the other two must carry an English title and
+# abstract as well. English is therefore the one group a record can be
+# counted on to have, which makes it the fallback when dc:language names
+# nothing usable: a group chosen for being first in the document would
+# depend on an order the repository never promised.
+def chosen_group(elements, lang):
     groups = {}
     order = []
     for one in elements:
@@ -253,9 +271,13 @@ def values_in_language(elements, lang):
             groups[key].append(value)
 
     if lang and groups.get(lang):
-        chosen = groups[lang]
+        chosen_key, chosen = lang, groups[lang]
+    elif groups.get(post_language_default):
+        chosen_key, chosen = (post_language_default,
+                              groups[post_language_default])
     else:
-        chosen = next((groups[key] for key in order if groups[key]), [])
+        chosen_key, chosen = next(
+            ((key, groups[key]) for key in order if groups[key]), ("", []))
 
     seen = set()
     result = []
@@ -263,7 +285,7 @@ def values_in_language(elements, lang):
         if one not in seen:
             seen.add(one)
             result.append(one)
-    return result
+    return chosen_key, result
 
 
 def text_of(element):

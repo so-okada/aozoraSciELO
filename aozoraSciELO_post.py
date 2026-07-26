@@ -104,6 +104,7 @@ def update(
     parent_cid,
     pt_method,
     pt_mode,
+    langs,
 ):
     result = 0
 
@@ -120,6 +121,7 @@ def update(
             parent_cid,
             pt_method,
             pt_mode,
+            langs,
         )
         # a stand in for a bsky response, so that stdout mode previews a
         # whole thread, abstract replies included.
@@ -138,6 +140,7 @@ def update(
             parent_cid,
             pt_method,
             pt_mode,
+            langs,
         )
         return result
 
@@ -160,7 +163,8 @@ def update(
     if pt_method == "post":
         try:
             result = client.send_post(
-                text=text, facets=generate_facets_for_urls(text))
+                text=text, facets=generate_facets_for_urls(text),
+                langs=langs)
             update_print(
                 cat,
                 preprint_id,
@@ -173,6 +177,7 @@ def update(
                 parent_cid,
                 pt_method,
                 pt_mode,
+                langs,
             )
         except Exception:
             time_now = utcnow()
@@ -188,7 +193,8 @@ def update(
             }
             result = client.send_post(
                 text=text, reply_to=reply_ref,
-                facets=generate_facets_for_urls(text)
+                facets=generate_facets_for_urls(text),
+                langs=langs
             )
             update_print(
                 cat,
@@ -202,6 +208,7 @@ def update(
                 parent_cid,
                 pt_method,
                 pt_mode,
+                langs,
             )
         except Exception:
             time_now = utcnow()
@@ -228,6 +235,7 @@ def update_print(
     parent_cid,
     pt_method,
     pt_mode,
+    langs,
 ):
     time_now = utcnow()
     ptext = (
@@ -243,6 +251,8 @@ def update_print(
         + pt_method
         + "\npost mode: "
         + str(pt_mode)
+        + "\nlangs: "
+        + ", ".join(langs)
         + "\nurl: "
         + atproto_uri_to_url(result_uri)
         + "\ntext: "
@@ -355,6 +365,7 @@ def newentries(
                 "",
                 "post",
                 pt_mode,
+                [post_language_default],
             )
         return None
 
@@ -410,6 +421,15 @@ def newentries(
     )
 
 
+# the language tag of a post about one preprint. dc:language of the
+# record is what chose the translation of the title and the abstract that
+# a post carries, so it is the language of the post as well. A record
+# that names no language it can use falls back on the default rather than
+# claim a language it does not have.
+def post_langs(language):
+    return [language if language else post_language_default]
+
+
 # an introductory text of each bot
 # an example: [2026-07-25 Sat (UTC), 4 new preprints found for SciELO Preprints]
 def intro(given_time, num, cat):
@@ -456,6 +476,7 @@ def newsubmissions(
             "",
             "post",
             pt_mode,
+            [post_language_default],
         )
     else:
         print("no summary for " + cat + ", "
@@ -465,6 +486,7 @@ def newsubmissions(
     for each in entries:
         if post_counter < post_updates:
             preprint_id = each["id"]
+            langs = post_langs(each["language"])
             result = update_limited(
                 logfiles,
                 cat,
@@ -478,6 +500,7 @@ def newsubmissions(
                 "",
                 "post",
                 pt_mode,
+                langs,
             )
             post_counter += 1
 
@@ -498,6 +521,7 @@ def newsubmissions(
                             result.cid,
                             "reply",
                             pt_mode,
+                            langs,
                         )
                     else:
                         abst_result = update_limited(
@@ -513,6 +537,7 @@ def newsubmissions(
                             abst_result.cid,
                             "reply",
                             pt_mode,
+                            langs,
                         )
                     if abst_result == 0:
                         break
