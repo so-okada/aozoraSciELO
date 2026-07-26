@@ -252,31 +252,62 @@ def update_print(
     print(ptext)
 
 
+# The log file entry of one label. switches.json and logfiles.json are
+# joined by the label alone, so a label carried by one and not by the
+# other is a mistake across a pair of files, and the mistake of one label
+# out of many. It must not stop the labels that are configured as they
+# should be, so this names the gap and leaves each caller its own safe
+# course.
+def log_entry(logfiles, cat, keys):
+    if not logfiles:
+        return None
+    if cat not in logfiles:
+        print("no log file entry for " + cat + " in logfiles.json")
+        return None
+    entry = logfiles[cat]
+    missing = [one for one in keys if one not in entry]
+    if missing:
+        print("no " + ", ".join(missing) + " for " + cat
+              + " in logfiles.json")
+        return None
+    return entry
+
+
 # logging for update
 def update_log(logfiles, cat, total, preprint_id, result, pt_method, pt_mode):
     if not result or not pt_mode or not logfiles:
         return None
 
     time_now = utcnow()
+    logname = ("post_summary_log"
+               if not preprint_id and pt_method == "post"
+               else pt_method + "_log")
+    entry = log_entry(logfiles, cat, [logname, "username"])
+    if entry is None:
+        # what goes unlogged can be posted again: a preprint announced a
+        # second time, or a second summary of a day. That is worth a word
+        # of its own rather than a silent return.
+        print("**not logged for " + cat + ": " + logname
+              + (", preprint id: " + preprint_id if preprint_id else ""))
+        return None
 
-    if not preprint_id and pt_method == "post":
-        filename = logfiles[cat]["post_summary_log"]
+    if logname == "post_summary_log":
         log_text = [
-            [time_now, total, logfiles[cat]["username"], result.uri, result.cid]
+            [time_now, total, entry["username"], result.uri, result.cid]
         ]
         df = pd.DataFrame(
             log_text, columns=["utc", "total", "username", "uri", "cid"])
     else:
         log_text = [
-            [time_now, preprint_id, logfiles[cat]["username"],
+            [time_now, preprint_id, entry["username"],
              result.uri, result.cid]
         ]
         df = pd.DataFrame(
             log_text,
             columns=["utc", "scielo_preprint_id", "username", "uri", "cid"]
         )
-        filename = logfiles[cat][pt_method + "_log"]
 
+    filename = entry[logname]
     if not filename:
         return None
     if os.path.exists(filename):
@@ -492,7 +523,15 @@ def announced_ids(cat, logfiles):
     if not logfiles:
         return set()
 
-    filename = logfiles[cat]["post_log"]
+    entry = log_entry(logfiles, cat, ["post_log", "username"])
+    if entry is None:
+        # a label logfiles.json does not carry cannot be checked against
+        # a post log, and an unchecked label announces every revised
+        # preprint again. Raising leaves this label unposted and lets the
+        # rest of the run go on.
+        raise Exception("no readable log file entry for " + cat)
+
+    filename = entry["post_log"]
     if not os.path.exists(filename):
         print("log file does not exist: " + filename)
         return set()
@@ -512,7 +551,7 @@ def announced_ids(cat, logfiles):
     if "scielo_preprint_id" not in df.columns:
         raise Exception("no scielo_preprint_id column in " + filename)
 
-    username = logfiles[cat]["username"]
+    username = entry["username"]
     ids = df.loc[df["username"] == username, "scielo_preprint_id"]
     return set(one for one in ids.dropna().astype(str))
 
@@ -523,7 +562,14 @@ def check_log_dates(cat, logname, logfiles):
         print("no log files")
         return False
 
-    filename = logfiles[cat][logname]
+    entry = log_entry(logfiles, cat, [logname, "username"])
+    if entry is None:
+        # nothing to read is not a post of today. What keeps this safe is
+        # the post log, read before anything is posted: a label that has
+        # no log file entry never reaches a post of a new submission.
+        return False
+
+    filename = entry[logname]
     if not os.path.exists(filename):
         print("log file does not exists: " + filename)
         return False
@@ -541,7 +587,7 @@ def check_log_dates(cat, logname, logfiles):
         log_time = datetime.fromisoformat(row["utc"])
         if (
             check_dates(log_time, time_now)
-            and row["username"] == logfiles[cat]["username"]
+            and row["username"] == entry["username"]
         ):
             return True
     return False
