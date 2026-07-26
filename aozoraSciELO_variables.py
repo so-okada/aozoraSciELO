@@ -67,8 +67,8 @@ post_language_default = "en"
 author_separator = "; "
 
 # posts for new submissions:
-min_len_authors = 60
-min_len_title = 100
+min_len_authors = 50
+min_len_title = 110
 newsub_spacer = 1
 margin = 3
 
