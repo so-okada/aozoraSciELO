@@ -228,7 +228,7 @@ Since 2023-01, the author has been running mastodon bots for
 all arXiv categories with [toXiv](https://github.com/so-okada/toXiv).
 Since 2025-02, the author has been running bluesky bots for arXiv
 categories with [bXiv](https://github.com/so-okada/bXiv).
-aozoraSciELO extends the practice to
+Since 2026-07, aozoraSciELO extends the practice to
 [SciELO Preprints](https://preprints.scielo.org/).
 [SciELO](https://www.scielo.org/en/about-scielo/) is an international
 cooperation program for open access scientific communication of all
