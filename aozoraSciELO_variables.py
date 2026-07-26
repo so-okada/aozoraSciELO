@@ -18,8 +18,8 @@ oai_max_pages = 200
 
 # a ceiling on every request this process sends to the OAI endpoint, bots
 # and retries alike.
-oai_calls = 60
-oai_call_period = 5 * 60
+oai_calls = 1
+oai_call_period = 5
 
 # how many times a whole harvest is tried
 oai_max_trial = 2
