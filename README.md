@@ -208,7 +208,7 @@ options:
 
 ## Versions
 
-* 0.0.1, initial release.
+* 0.0.1, initial release, 2026-07-26.
 
 
 ## Bot List
