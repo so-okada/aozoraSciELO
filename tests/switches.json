@@ -4,7 +4,7 @@
         "password": "app_password",
         "set": "",
         "newsubmissions": "1",
-        "abstracts": "1",
+        "abstracts": "",
         "summaries": "1"
     },
     "An OAI set of your choice": {

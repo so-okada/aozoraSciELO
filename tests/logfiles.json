@@ -1,14 +1,15 @@
 {
     "SciELO Preprints": {
         "username": "aozorascielo-ppbot.bsky.social",
-        "post_summary_log": "tests/logfiles/ppbot_post_summaries.csv",
-        "post_log": "tests/logfiles/ppbot_posts.csv",
-        "reply_log": "tests/logfiles/ppbot_replies.csv"
+        "post_summary_log": "ppbot_post_summaries.csv",
+        "post_log": "ppbot_posts.csv",
+        "reply_log": "ppbot_replies.csv"
     },
     "An OAI set of your choice": {
         "username": "another-bot.bsky.social",
-        "post_summary_log": "tests/logfiles/another-bot_post_summaries.csv",
-        "post_log": "tests/logfiles/another-bot_posts.csv",
-        "reply_log": "tests/logfiles/another-bot_replies.csv"
+        "post_summary_log": "another-bot_post_summaries.csv",
+        "post_log": "another-bot_posts.csv",
+        "reply_log": "another-bot_replies.csv"
     }
+}
 }
