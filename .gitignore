@@ -8,3 +8,5 @@
 !tests/
 !tests/*.py
 !tests/*.json
+!tests/logfiles/
+!tests/logfiles/*.csv
