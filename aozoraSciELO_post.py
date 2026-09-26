@@ -658,10 +658,17 @@ def generate_facets_for_urls(text):
     facets = []
 
     for match in url_pattern.finditer(text):
+        # a url in running text is often followed by a period or a
+        # closing parenthesis, which belongs to the sentence, not to the
+        # link. A closing parenthesis stays when the url opened one.
+        url = match.group()
+        while url and (url[-1] in ".,;:!?'\""
+                       or (url[-1] == ")"
+                           and url.count(")") > url.count("("))):
+            url = url[:-1]
         # convert character offsets to UTF-8 byte offsets
         byte_start = len(text[:match.start()].encode("utf-8"))
-        byte_end = len(text[:match.end()].encode("utf-8"))
-        url = match.group()
+        byte_end = len(text[:match.start() + len(url)].encode("utf-8"))
 
         facets.append(
             {
