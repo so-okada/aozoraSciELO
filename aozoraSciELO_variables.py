@@ -9,7 +9,7 @@ oai_metadata_prefix = "oai_dc"
 oai_timeout = 60
 
 # user agent string for OAI-PMH requests
-oai_user_agent = "aozorascielo-ppbot/1.0 (+https://bsky.app/profile/your_bot)"
+oai_user_agent = "aozorascielo-ppbot/1.0 (paper announcement bot; +https://github.com/so-okada/aozoraSciELO/)"
 
 # sleep between resumptionToken pages of one harvest
 oai_page_sleep = 1
