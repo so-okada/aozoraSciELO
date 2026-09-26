@@ -59,18 +59,18 @@ if from_days > oai_from_days_upper_limit:
 
 
 try:
-    f = open(switches)
+    with open(switches) as f:
+        switches = json.load(f)
 except Exception:
     traceback.print_exc()
     raise Exception('can not obtain output switches and api keys')
-switches = json.load(f)
 
 if logfiles:
     try:
-        f = open(logfiles)
+        with open(logfiles) as f:
+            logfiles = json.load(f)
     except Exception:
         traceback.print_exc()
         raise Exception('can not obtain log filenames')
-    logfiles = json.load(f)
 
 aSp.main(switches, logfiles, pt_mode, num_last_days)
