@@ -145,11 +145,10 @@ def surname(name):
     return HumanName(name).last or name
 
 
-# the family name of the first author alone, as in "Silva et al.", since
-# an inverted name would otherwise read "Silva, Joao da, et al."
 def etal(orig):
     names = orig.split(author_separator.strip())
-    return surname(names[0]) + " et al."
+    first_author = names[0].strip()
+    return first_author + ", et al."
 
 
 # separate an abstract with a counter and a url tag
